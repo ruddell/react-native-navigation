@@ -4,6 +4,7 @@ const Button = require('../components/Button')
 const Navigation = require('./../services/Navigation');
 const Screens = require('./Screens');
 const { component } = require('../commons/Layouts');
+const {BackHandler, Alert} = require('react-native')
 const {
   SWITCH_TAB_BY_INDEX_BTN,
   SWITCH_TAB_BY_COMPONENT_ID_BTN,
@@ -32,7 +33,28 @@ class FirstBottomTabScreen extends React.Component {
       }
     };
   }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress = () => {
+    Alert.alert(
+      'Confirm exit',
+      'Do you want to exit App prett?',
+      [
+        {text: 'CANCEL', style: 'cancel'},
+        {text: 'OK', onPress: () => {
+          BackHandler.exitApp()
+        }
+      }
+      ]
+    );
+    return true;
+  }
   constructor(props) {
     super(props);
     this.dotVisible = true;

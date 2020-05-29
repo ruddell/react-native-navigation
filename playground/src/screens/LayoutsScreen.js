@@ -2,6 +2,7 @@ const React = require('react');
 const { Platform } = require('react-native');
 const Root = require('../components/Root');
 const Button = require('../components/Button')
+const {BackHandler, Alert} = require('react-native')
 const {
   WELCOME_SCREEN_HEADER,
   STACK_BTN,
@@ -24,6 +25,29 @@ class LayoutsScreen extends React.Component {
         }
       }
     };
+  }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress = () => {
+    Alert.alert(
+      'Confirm exit',
+      'Do you want to exit App prett?',
+      [
+        {text: 'CANCEL', style: 'cancel'},
+        {text: 'OK', onPress: () => {
+          BackHandler.exitApp()
+        }
+      }
+      ]
+    );
+    return true;
   }
 
   render() {
